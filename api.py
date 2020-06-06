@@ -20,7 +20,7 @@ class DockerStart(Resource):
         try:
             dash_container = client.containers.run(
                 'dash', ports={'8050': '8050'}, name=container_name, detach=True, remove=True)
-            return jsonify({'status': dash_container.status,})
+            return jsonify({'status': dash_container.status, })
         except docker.errors.APIError as e:
             return jsonify({'error': e.explanation})
 
@@ -31,7 +31,7 @@ class DockerStatus(Resource):
         try:
             dash_container = client.containers.get(container_name)
             return jsonify({'status': dash_container.status,
-                            'url': f"{dash_container.attrs['NetworkSettings']['IPAddress']}:{dash_container.attrs['NetworkSettings']['Ports']['8050/tcp'][0]['HostPort']}"})
+                            'url': '46.101.248.180:8050'})
         except docker.errors.NotFound as e:
             return jsonify({'error': e.explanation})
 
@@ -54,4 +54,4 @@ api.add_resource(DockerStatus, '/status')
 api.add_resource(DockerStop, '/stop')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
